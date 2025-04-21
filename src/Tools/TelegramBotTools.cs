@@ -2,27 +2,15 @@
 using ModelContextProtocol.Server;
 using System.ComponentModel;
 using System.Text.Json;
-using Telegram.Bot;
-using Telegram.Bot.Types.Enums;
 using TelegramBotMCP.Data;
 using TelegramBotMCP.Models;
+using TelegramBotMCP.Services.Abstract;
 
 namespace TelegramBotMCP.Tools;
 
 [McpServerToolType]
-public sealed class TelegramBotTools
+public sealed class TelegramBotTools(ITelegramBot telegramBot, TelegramRepository repository, ILogger<TelegramBotTools> logger)
 {
-    private readonly ITelegramBotClient _telegramBot;
-    private readonly TelegramRepository _repository;
-    private readonly ILogger<TelegramBotTools> _logger;
-
-    public TelegramBotTools(ITelegramBotClient telegramBot, TelegramRepository repository, ILogger<TelegramBotTools> logger)
-    {
-        _telegramBot = telegramBot;
-        _repository = repository;
-        _logger = logger;
-    }
-
     [McpServerTool, Description("Send message to a specific Telegram user")]
     public async Task<string> SendMessage(
         [Description("Recipient user ID")] long userId,
@@ -31,27 +19,24 @@ public sealed class TelegramBotTools
         try
         {
             // Find the user in the database - without creating if not exists
-            var users = await _repository.GetAllUsersAsync();
+            var users = await repository.GetAllUsersAsync();
             var user = users.FirstOrDefault(u => u.Id == userId);
 
             if (user == null)
             {
-                _logger.LogWarning($"User with ID {userId} not found in database. " +
-                    $"Users are only created when they send a message to the bot first.");
+                logger.LogWarning("User with ID {userId} not found in database.", userId);
 
                 return $"Cannot send message: User with ID {userId} not found in database. " +
                        $"Users are only created when they send a message to the bot first.";
             }
 
             var message = new Message(messageText, DateTime.UtcNow, user, false);
-            await _repository.SaveMessageAsync(message);
+            await repository.SaveMessageAsync(message);
 
             // Send the message via Telegram API with more options
-            var sentMessage = await _telegramBot.SendMessage(
+            await telegramBot.SendMessage(
                 chatId: userId,
-                text: messageText,
-                parseMode: ParseMode.Markdown,
-                disableNotification: false);
+                text: messageText);
 
             return $"Message sent to user {userId}.";
         }
@@ -66,7 +51,7 @@ public sealed class TelegramBotTools
     {
         try
         {
-            var adminUsers = await _repository.GetAdminUsersAsync();
+            var adminUsers = await repository.GetAdminUsersAsync();
 
             if (adminUsers.Count == 0)
             {
@@ -82,14 +67,12 @@ public sealed class TelegramBotTools
                 {
                     var message = new Message(messageText, DateTime.UtcNow, admin, false);
                     // Save the outgoing message to the database
-                    await _repository.SaveMessageAsync(message); // false = message is from bot
+                    await repository.SaveMessageAsync(message); // false = message is from bot
 
                     // Send the message via Telegram API
-                    await _telegramBot.SendMessage(
+                    await telegramBot.SendMessage(
                         chatId: admin.Id,
-                        text: messageText,
-                        parseMode: ParseMode.Markdown,
-                        disableNotification: false);
+                        text: messageText);
 
                     successCount++;
                 }
@@ -100,7 +83,7 @@ public sealed class TelegramBotTools
             }
 
             var resultMessage = $"Message sent to {successCount} of {adminUsers.Count} admin users.";
-            if (errorMessages.Any())
+            if (errorMessages.Count != 0)
             {
                 resultMessage += $"\nErrors: {string.Join(", ", errorMessages)}";
             }
@@ -118,7 +101,7 @@ public sealed class TelegramBotTools
         [Description("User ID to update")] long userId,
         [Description("Admin status (true/false)")] bool isAdmin)
     {
-        var result = await _repository.SetUserAdminStatusAsync(userId, isAdmin);
+        var result = await repository.SetUserAdminStatusAsync(userId, isAdmin);
         if (result)
         {
             return $"Successfully {(isAdmin ? "set" : "removed")} admin status for user {userId}";
@@ -129,34 +112,32 @@ public sealed class TelegramBotTools
         }
     }
 
+    public record NewMessageDto(string Message, string From, long UserId);
+
     [McpServerTool, Description("Get unread messages. Pass default limit to 100")]
-    public async Task<string> GetUnreadMessages()
+    public async Task<string> GetNewMessages()
     {
         try
         {
-            var updates = await _telegramBot.GetUpdates(100);
+            var updates = await telegramBot.GetUpdates(100);
 
-            var messages = new List<object>();
+            var messages = new List<NewMessageDto>();
 
             foreach (var update in updates)
             {
-                if (update.Message?.Text == null || update.Message?.From == null)
+                // For now, we only care about text messages
+                if (string.IsNullOrWhiteSpace(update.Message?.Text) || update.Message?.From == null)
                 {
                     continue;
                 }
 
                 // Save or update the user in the database
-                var user = await _repository.CreateOrUpdateUserAsync(new(update.Message.From));
+                var user = await repository.CreateOrUpdateUserAsync(new(update.Message.From));
 
                 var message = new Message(update.Message, user);
-                await _repository.SaveMessageAsync(message);
+                await repository.SaveMessageAsync(message);
 
-                messages.Add(new
-                {
-                    Message = update.Message.Text,
-                    From = update.Message.From.Username ?? "Unknown",
-                    UserId = update.Message.From.Id
-                });
+                messages.Add(new(update.Message.Text, update.Message.From.Username ?? "Unknown", update.Message.From.Id));
             }
 
             if (messages.Count == 0)
@@ -168,7 +149,7 @@ public sealed class TelegramBotTools
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to get unread messages");
+            logger.LogError(ex, "Failed to get unread messages");
             return $"Failed to get unread messages: {ex.Message}";
         }
     }
@@ -176,14 +157,15 @@ public sealed class TelegramBotTools
     [McpServerTool, Description("Get all users")]
     public async Task<string> GetAllUsers()
     {
-        var users = await _repository.GetAllUsersAsync();
+        var users = await repository.GetAllUsersAsync();
 
         var formattedUsers = users.Select(u => new
         {
             u.Id,
             u.Username,
             u.FirstName,
-            u.LastName
+            u.LastName,
+            u.IsAdmin
         }).ToList();
 
         return JsonSerializer.Serialize(formattedUsers);
@@ -192,7 +174,7 @@ public sealed class TelegramBotTools
     [McpServerTool, Description("Get conversation history with a specific user")]
     public async Task<string> GetUserConversation([Description("User ID")] long userId, [Description("Number of messages")] int limit = 50)
     {
-        var messages = await _repository.GetUserMessagesAsync(userId, limit);
+        var messages = await repository.GetUserMessagesAsync(userId, limit);
 
         var conversation = messages.Select(m => new
         {

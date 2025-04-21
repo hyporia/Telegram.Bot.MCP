@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using TelegramBotMCP.Services.Abstract;
 
 namespace TelegramBotMCP.Models;
 
@@ -20,7 +21,7 @@ public class Message
     private Message() { }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
-    public Message(Telegram.Bot.Types.Message message, User user)
+    public Message(MessageDTO message, User user)
     {
         Text = message.Text ?? string.Empty;
         Timestamp = message.Date.ToUniversalTime();

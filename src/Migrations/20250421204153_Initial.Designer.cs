@@ -11,8 +11,8 @@ using TelegramBotMCP.Data;
 namespace TelegramBotMCP.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250420234235_Init")]
-    partial class Init
+    [Migration("20250421204153_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

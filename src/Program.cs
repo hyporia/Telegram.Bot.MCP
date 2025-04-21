@@ -8,6 +8,8 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using Telegram.Bot;
 using TelegramBotMCP.Data;
+using TelegramBotMCP.Services;
+using TelegramBotMCP.Services.Abstract;
 using TelegramBotMCP.Tools;
 
 var builder = Host.CreateEmptyApplicationBuilder(new HostApplicationBuilderSettings
@@ -36,7 +38,7 @@ var dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "telegr
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite($"Data Source={dbPath}"));
-builder.Services.AddScoped<TelegramRepository>();
+builder.Services.AddTransient<TelegramRepository>();
 
 builder.Services
     .AddMcpServer()
@@ -49,7 +51,9 @@ if (string.IsNullOrEmpty(token))
 {
     throw new ArgumentException("Bot token is not set. Please set the BotToken in the configuration.");
 }
-builder.Services.AddHttpClient<ITelegramBotClient, TelegramBotClient>(httpClient => new TelegramBotClient(token, httpClient));
+builder.Services
+    .AddTransient<ITelegramBot, TelegramBot>()
+    .AddHttpClient<ITelegramBotClient>(httpClient => new TelegramBotClient(token, httpClient));
 
 builder.Services.AddOpenTelemetry()
     .WithTracing(builder =>

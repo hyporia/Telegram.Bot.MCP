@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using TelegramBotMCP.Services.Abstract;
 
 namespace TelegramBotMCP.Models;
 
@@ -11,7 +12,7 @@ public class User : IEquatable<User>
     public string LastName { get; set; }
     public bool IsAdmin { get; set; }
 
-    public User(Telegram.Bot.Types.User user)
+    public User(UserDTO user)
     {
         Id = user.Id;
         Username = user.Username ?? string.Empty;
@@ -33,6 +34,8 @@ public class User : IEquatable<User>
 
         return Id == other.Id && Username == other.Username && FirstName == other.FirstName && LastName == other.LastName;
     }
+
+    public override bool Equals(object? obj) => obj is User other && Equals(other);
 
     public override int GetHashCode() => HashCode.Combine(Id, Username, FirstName, LastName);
 
