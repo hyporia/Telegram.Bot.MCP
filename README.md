@@ -1,26 +1,22 @@
 # TelegramBotMCP
 
-TelegramBotMCP is a .NET 9.0 console application that implements a Telegram bot with Model Context Protocol (MCP) server integration. It uses Entity Framework Core with SQLite for data storage, Serilog for logging, and OpenTelemetry for observability.
-
+TelegramBotMCP is a .NET 9.0 console application that implements a Telegram bot integrated with a Model Context Protocol (MCP) server. It allows your local agent to communicate with Telegram users via a bot account.
 ## Features
 
 -   Telegram bot integration using [Telegram.Bot](https://github.com/TelegramBots/Telegram.Bot)
 -   MCP server tool integration
 -   Entity Framework Core with SQLite
--   Serilog logging (file and console)
--   OpenTelemetry tracing and metrics
+-   OpenTelemetry tracing, metrics and logging
 
 ## Getting Started
 
 ### Prerequisites
 
 -   [.NET 9.0 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
--   SQLite (optional, database file is created automatically)
 
 ### Configuration
 
--   Set your Telegram bot token in user secrets or environment variables as `TELEGRAM_BOT_TOKEN`.
--   Adjust `appsettings.json` and `appsettings.Development.json` as needed.
+-   Set your Telegram bot token in environment variables as `TELEGRAM_BOT_TOKEN`.
 
 ### Build and Run
 
@@ -42,8 +38,8 @@ A `Dockerfile` is provided for containerized deployment.
 
 ## License
 
-Specify your license here (e.g., MIT, Apache-2.0).
+TBD
 
 ## Author
 
-Piligrimm
+hyporia
