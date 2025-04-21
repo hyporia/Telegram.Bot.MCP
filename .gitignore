@@ -1,0 +1,28 @@
+# Ignore Visual Studio and VS Code folders
+.vs/
+.vscode/
+
+# Ignore Visual Studio temporary files, build results, and user-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build results
+bin/
+obj/
+
+# Logs
+logs/
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# User secrets
+secrets.json
+
+# Others
+*.db
+*.sqlite

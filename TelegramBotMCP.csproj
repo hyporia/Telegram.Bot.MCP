@@ -1,0 +1,48 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	<UserSecretsId>426e33bc-1c7e-4345-bb63-297783f9c1ed</UserSecretsId>
+    <Version>0.0.1</Version>
+    <Authors>hyporia</Authors>
+    <Company>hyporia</Company>
+    <Product>TelegramBotMCP</Product>
+    <Description>TelegramBotMCP is a .NET 9.0 console application that implements a Telegram bot with Model Context Protocol (MCP) server integration, Entity Framework Core, Serilog, and OpenTelemetry.</Description>
+    <PackageProjectUrl>https://github.com/hyporia/TelegramBotMCP</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/hyporia/TelegramBotMCP.git</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.4" />
+    <PackageReference Include="ModelContextProtocol" Version="0.1.0-preview.10" />
+    <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.11.2" />
+    <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.11.2" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.11.0-beta.2" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.11.1" />
+    <PackageReference Include="Telegram.Bot" Version="22.5.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+    <ItemGroup Condition="'$(Configuration)' == 'Debug'">
+	    <None Update="appsettings.Development.json">
+		    <DependentUpon>appsettings.json</DependentUpon>
+		    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	    </None>
+    </ItemGroup>
+	
+</Project>
