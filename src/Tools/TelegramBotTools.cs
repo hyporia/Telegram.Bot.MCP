@@ -114,8 +114,8 @@ public sealed class TelegramBotTools(ITelegramBot telegramBot, TelegramRepositor
 
     public record NewMessageDto(string Message, string From, long UserId);
 
-    [McpServerTool, Description("Get unread messages. Pass default limit to 100")]
-    public async Task<string> GetNewMessages()
+    [McpServerTool, Description("Read new messages.")]
+    public async Task<string> ReadNewMessages()
     {
         try
         {

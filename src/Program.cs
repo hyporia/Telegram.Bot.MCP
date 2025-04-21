@@ -53,7 +53,7 @@ if (string.IsNullOrEmpty(token))
 }
 builder.Services
     .AddTransient<ITelegramBot, TelegramBot>()
-    .AddHttpClient<ITelegramBotClient>(httpClient => new TelegramBotClient(token, httpClient));
+    .AddHttpClient<ITelegramBotClient, TelegramBotClient>(httpClient => new(token, httpClient));
 
 builder.Services.AddOpenTelemetry()
     .WithTracing(builder =>
