@@ -12,7 +12,7 @@ TelegramBotMCP is a .NET 9.0 console application that implements a Telegram bot 
 
 ### Prerequisites
 
--   [.NET 9.0 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
+-   Docker or another app to work with containers
 
 ### Configuration
 
@@ -56,13 +56,6 @@ I [configured the `msp.json` file for my VSCode](https://code.visualstudio.com/d
 ```
 
 After I did that, Copilot in agent mode was able to see TelegramBotMCP tools and use them.
-
-### Build and Run
-
-```sh
-dotnet build
-dotnet run
-```
 
 ### Docker
 
