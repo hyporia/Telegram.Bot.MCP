@@ -4,7 +4,7 @@ using Moq;
 using System.Text.Json;
 using Telegram.Bot.MCP.Application.Interfaces;
 using TelegramBotMCP.Tests._seedWork;
-using static Telegram.Bot.MCP.Application.Tools.TelegramBotTools;
+using static Telegram.Bot.MCP.Application.Commands.ReadNewMessagesCommandHandler;
 
 namespace TelegramBotMCP.Tests;
 
@@ -23,7 +23,7 @@ public class ReadNewMessagesTests(ITestOutputHelper output) : IAsyncLifetime
         _testFixture.BotMock.Setup(m => m.ReadNewMessages(It.IsAny<int>())).ReturnsAsync(updates);
 
         // Act
-        var result = await _testFixture.TelegramBotTools.ReadNewMessages();
+        var result = await _testFixture.SUT.Handle(new(100), CancellationToken.None);
 
         // Assert
         var messagesSentAsResponse = JsonSerializer.Deserialize<List<NewMessageDto>>(result);
@@ -59,7 +59,7 @@ public class ReadNewMessagesTests(ITestOutputHelper output) : IAsyncLifetime
         _testFixture.BotMock.Setup(m => m.ReadNewMessages(It.IsAny<int>())).ReturnsAsync([]);
 
         // Act
-        var result = await _testFixture.TelegramBotTools.ReadNewMessages();
+        var result = await _testFixture.SUT.Handle(new(100), CancellationToken.None);
 
         // Assert
         Assert.NotNull(result);
@@ -73,7 +73,7 @@ public class ReadNewMessagesTests(ITestOutputHelper output) : IAsyncLifetime
         _testFixture.BotMock.Setup(m => m.ReadNewMessages(It.IsAny<int>())).ThrowsAsync(new Exception("Test exception"));
 
         // Act
-        var result = await _testFixture.TelegramBotTools.ReadNewMessages();
+        var result = await _testFixture.SUT.Handle(new(100), CancellationToken.None);
 
         // Assert
         Assert.NotEmpty(result);

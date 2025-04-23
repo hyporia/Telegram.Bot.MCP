@@ -5,7 +5,6 @@ namespace Telegram.Bot.MCP.Services;
 
 internal class TelegramBot(ITelegramBotClient botClient) : ITelegramBot
 {
-
     /// <inheritdoc/>
     public async Task SendMessage(long chatId, string text)
         => await botClient.SendMessage(

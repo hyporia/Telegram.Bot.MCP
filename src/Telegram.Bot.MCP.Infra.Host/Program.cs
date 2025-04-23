@@ -7,8 +7,8 @@ using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using Telegram.Bot;
+using Telegram.Bot.MCP;
 using Telegram.Bot.MCP.Application.Interfaces;
-using Telegram.Bot.MCP.Application.Tools;
 using Telegram.Bot.MCP.Infra.Persistance;
 using Telegram.Bot.MCP.Infra.Persistance.Repositories;
 using Telegram.Bot.MCP.Services;
@@ -40,6 +40,8 @@ var dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "telegr
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite($"Data Source={dbPath}"));
 builder.Services.AddTransient<ITelegramRepository, TelegramRepository>();
+
+builder.Services.AddMediator();
 
 builder.Services
     .AddMcpServer()
