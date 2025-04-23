@@ -12,7 +12,7 @@ internal class TelegramBot(ITelegramBotClient botClient) : ITelegramBot
         => await botClient.SendMessage(
                chatId: chatId,
                text: text,
-               parseMode: Telegram.Bot.Types.Enums.ParseMode.Markdown);
+               parseMode: ParseMode.MarkdownV2);
 
 
     /// <inheritdoc/>
