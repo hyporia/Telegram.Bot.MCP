@@ -5,10 +5,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Telegram.Bot.MCP.Infra.Persistance;
 
-
 #nullable disable
 
-namespace Telegram.Bot.MCP.Migrations
+namespace Telegram.Bot.MCP.Infra.Persistance.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -18,7 +17,7 @@ namespace Telegram.Bot.MCP.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.4");
 
-            modelBuilder.Entity("TelegramBotMCP.Models.Message", b =>
+            modelBuilder.Entity("Telegram.Bot.MCP.Domain.Message", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -29,50 +28,60 @@ namespace Telegram.Bot.MCP.Migrations
 
                     b.Property<string>("Text")
                         .IsRequired()
+                        .HasMaxLength(4096)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Timestamp")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetime2");
 
                     b.Property<long>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Timestamp");
+
                     b.HasIndex("UserId");
+
+                    b.HasIndex("UserId", "Timestamp");
 
                     b.ToTable("Messages");
                 });
 
-            modelBuilder.Entity("TelegramBotMCP.Models.User", b =>
+            modelBuilder.Entity("Telegram.Bot.MCP.Domain.User", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsAdmin")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Username")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("IsAdmin");
+
+                    b.HasIndex("Username");
+
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("TelegramBotMCP.Models.Message", b =>
+            modelBuilder.Entity("Telegram.Bot.MCP.Domain.Message", b =>
                 {
-                    b.HasOne("TelegramBotMCP.Models.User", "User")
+                    b.HasOne("Telegram.Bot.MCP.Domain.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
