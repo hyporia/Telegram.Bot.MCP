@@ -8,4 +8,4 @@ FROM mcr.microsoft.com/dotnet/runtime:9.0-alpine AS final
 WORKDIR /app
 COPY --from=build /app/publish .
 EXPOSE 80
-ENTRYPOINT ["dotnet", "TelegramBotMCP.dll"]
+ENTRYPOINT ["dotnet", "Telegram.Bot.MCP.dll"]

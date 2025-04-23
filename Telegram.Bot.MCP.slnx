@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Telegram.Bot.MCP/Telegram.Bot.MCP.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Telegram.Bot.MCP.Tests/Telegram.Bot.MCP.Tests.csproj" />
+  </Folder>
+</Solution>

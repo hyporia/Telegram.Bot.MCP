@@ -10,9 +10,9 @@
     <Authors>hyporia</Authors>
     <Company>hyporia</Company>
     <Product>TelegramBotMCP</Product>
-    <Description>TelegramBotMCP is a .NET 9.0 console application that implements a Telegram bot with Model Context Protocol (MCP) server integration, Entity Framework Core, Serilog, and OpenTelemetry.</Description>
-    <PackageProjectUrl>https://github.com/hyporia/TelegramBotMCP</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/hyporia/TelegramBotMCP.git</RepositoryUrl>
+    <Description>Telegram.Bot.MCP is a .NET 9.0 console application that implements a Telegram bot with Model Context Protocol (MCP) server integration, Entity Framework Core, Serilog, and OpenTelemetry.</Description>
+    <PackageProjectUrl>https://github.com/hyporia/Telegram.Bot.MCP</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/hyporia/Telegram.Bot.MCP.git</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 

@@ -1,6 +1,6 @@
-# TelegramBotMCP
+# Telegram.Bot.MCP
 
-TelegramBotMCP is a .NET 9.0 console application that implements a Telegram bot integrated with a Model Context Protocol (MCP) server. It allows your local agent to communicate with Telegram users via a bot account.
+Telegram.Bot.MCP is a .NET 9.0 console application that implements a Telegram bot integrated with a Model Context Protocol (MCP) server. It allows your local agent to communicate with Telegram users via a bot account.
 
 ## Features
 
