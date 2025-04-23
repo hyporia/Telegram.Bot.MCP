@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using TelegramBotMCP.Services.Abstract;
+using Telegram.Bot.MCP.Services.Abstract;
 
-namespace TelegramBotMCP.Models;
+namespace Telegram.Bot.MCP.Models;
 
 public class User : IEquatable<User>
 {

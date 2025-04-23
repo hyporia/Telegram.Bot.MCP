@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TelegramBotMCP.Data;
+using Telegram.Bot.MCP.Data;
 
 #nullable disable
 
-namespace TelegramBotMCP.Migrations
+namespace Telegram.Bot.MCP.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20250421204153_Initial")]

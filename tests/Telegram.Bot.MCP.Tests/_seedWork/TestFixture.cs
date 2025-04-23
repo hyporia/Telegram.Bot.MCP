@@ -1,9 +1,9 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using TelegramBotMCP.Data;
-using TelegramBotMCP.Services.Abstract;
-using TelegramBotMCP.Tools;
+using Telegram.Bot.MCP.Data;
+using Telegram.Bot.MCP.Services.Abstract;
+using Telegram.Bot.MCP.Tools;
 
 namespace TelegramBotMCP.Tests._seedWork;
 internal class TestFixture : IAsyncLifetime

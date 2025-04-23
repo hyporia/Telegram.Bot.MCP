@@ -1,6 +1,6 @@
 ﻿using Telegram.Bot.Types;
 
-namespace TelegramBotMCP.Services.Abstract;
+namespace Telegram.Bot.MCP.Services.Abstract;
 
 /// <summary>
 /// Interface for Telegram bot operations, abstracting ITelegramBotClient

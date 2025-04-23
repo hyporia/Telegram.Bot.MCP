@@ -2,11 +2,11 @@
 using ModelContextProtocol.Server;
 using System.ComponentModel;
 using System.Text.Json;
-using TelegramBotMCP.Data;
-using TelegramBotMCP.Models;
-using TelegramBotMCP.Services.Abstract;
+using Telegram.Bot.MCP.Data;
+using Telegram.Bot.MCP.Models;
+using Telegram.Bot.MCP.Services.Abstract;
 
-namespace TelegramBotMCP.Tools;
+namespace Telegram.Bot.MCP.Tools;
 
 [McpServerToolType]
 public sealed class TelegramBotTools(ITelegramBot telegramBot, TelegramRepository repository, ILogger<TelegramBotTools> logger)
@@ -19,8 +19,7 @@ public sealed class TelegramBotTools(ITelegramBot telegramBot, TelegramRepositor
         try
         {
             // Find the user in the database - without creating if not exists
-            var users = await repository.GetAllUsersAsync();
-            var user = users.FirstOrDefault(u => u.Id == userId);
+            var user = await repository.GetUserByIdAsync(userId);
 
             if (user == null)
             {

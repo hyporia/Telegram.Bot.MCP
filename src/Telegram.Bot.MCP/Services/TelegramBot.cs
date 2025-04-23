@@ -1,8 +1,7 @@
-﻿using Telegram.Bot;
+﻿using Telegram.Bot.MCP.Services.Abstract;
 using Telegram.Bot.Types.Enums;
-using TelegramBotMCP.Services.Abstract;
 
-namespace TelegramBotMCP.Services;
+namespace Telegram.Bot.MCP.Services;
 
 internal class TelegramBot(ITelegramBotClient botClient) : ITelegramBot
 {

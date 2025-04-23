@@ -6,6 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	<UserSecretsId>426e33bc-1c7e-4345-bb63-297783f9c1ed</UserSecretsId>
+	<RootNamespace>Telegram.Bot.MCP</RootNamespace>
+	<AssemblyName>Telegram.Bot.MCP</AssemblyName>
     <Version>0.0.1</Version>
     <Authors>hyporia</Authors>
     <Company>hyporia</Company>

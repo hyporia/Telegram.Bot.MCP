@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using TelegramBotMCP.Services.Abstract;
+using Telegram.Bot.MCP.Services.Abstract;
 
-namespace TelegramBotMCP.Models;
+namespace Telegram.Bot.MCP.Models;
 
 public class Message
 {

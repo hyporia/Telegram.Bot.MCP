@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using TelegramBotMCP.Models;
+using Telegram.Bot.MCP.Models;
 
-namespace TelegramBotMCP.Data;
+namespace Telegram.Bot.MCP.Data;
 
 public class TelegramRepository(ApplicationDbContext context, ILogger<TelegramRepository> logger)
 {

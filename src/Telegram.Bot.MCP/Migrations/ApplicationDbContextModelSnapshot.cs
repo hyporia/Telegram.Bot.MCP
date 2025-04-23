@@ -3,11 +3,12 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TelegramBotMCP.Data;
+using Telegram.Bot.MCP.Data;
+
 
 #nullable disable
 
-namespace TelegramBotMCP.Migrations
+namespace Telegram.Bot.MCP.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot

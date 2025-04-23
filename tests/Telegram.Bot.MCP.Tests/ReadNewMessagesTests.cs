@@ -2,9 +2,9 @@ using AutoFixture.Xunit3;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using System.Text.Json;
-using TelegramBotMCP.Services.Abstract;
+using Telegram.Bot.MCP.Services.Abstract;
+using Telegram.Bot.MCP.Tools;
 using TelegramBotMCP.Tests._seedWork;
-using TelegramBotMCP.Tools;
 
 namespace TelegramBotMCP.Tests;
 
