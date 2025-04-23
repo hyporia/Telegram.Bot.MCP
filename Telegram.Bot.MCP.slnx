@@ -1,6 +1,9 @@
 <Solution>
   <Folder Name="/src/">
-    <Project Path="src/Telegram.Bot.MCP/Telegram.Bot.MCP.csproj" />
+    <Project Path="src/Telegram.Bot.MCP.Application/Telegram.Bot.MCP.Application.csproj" />
+    <Project Path="src/Telegram.Bot.MCP.Domain/Telegram.Bot.MCP.Domain.csproj" />
+    <Project Path="src/Telegram.Bot.MCP.Infra.Host/Telegram.Bot.MCP.Infra.Host.csproj" />
+    <Project Path="src/Telegram.Bot.MCP.Infra.Persistance/Telegram.Bot.MCP.Infra.Persistance.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Telegram.Bot.MCP.Tests/Telegram.Bot.MCP.Tests.csproj" />

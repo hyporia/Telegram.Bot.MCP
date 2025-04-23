@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Telegram.Bot.MCP.Models;
+using Telegram.Bot.MCP.Domain;
 
-namespace Telegram.Bot.MCP.Data;
+namespace Telegram.Bot.MCP.Infra.Persistance;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {

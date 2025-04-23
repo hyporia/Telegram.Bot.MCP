@@ -46,5 +46,11 @@
 		    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	    </None>
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Telegram.Bot.MCP.Application\Telegram.Bot.MCP.Application.csproj" />
+      <ProjectReference Include="..\Telegram.Bot.MCP.Domain\Telegram.Bot.MCP.Domain.csproj" />
+      <ProjectReference Include="..\Telegram.Bot.MCP.Infra.Persistance\Telegram.Bot.MCP.Infra.Persistance.csproj" />
+    </ItemGroup>
 	
 </Project>

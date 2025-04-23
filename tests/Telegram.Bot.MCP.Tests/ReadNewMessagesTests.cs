@@ -2,9 +2,9 @@ using AutoFixture.Xunit3;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using System.Text.Json;
-using Telegram.Bot.MCP.Services.Abstract;
-using Telegram.Bot.MCP.Tools;
+using Telegram.Bot.MCP.Application.Interfaces;
 using TelegramBotMCP.Tests._seedWork;
+using static Telegram.Bot.MCP.Application.Tools.TelegramBotTools;
 
 namespace TelegramBotMCP.Tests;
 
@@ -17,24 +17,24 @@ public class ReadNewMessagesTests(ITestOutputHelper output) : IAsyncLifetime
     public ValueTask DisposeAsync() => _testFixture.DisposeAsync();
 
     [Theory, AutoData]
-    public async Task ReadNewMessages_WithMessages_ReturnsFormattedJson(UpdateDTO[] updates)
+    public async Task ReadNewMessages_WithMessages_ReturnsFormattedJson(Message[] updates)
     {
         // Arrange
-        _testFixture.BotMock.Setup(m => m.GetUpdates(It.IsAny<int>())).ReturnsAsync(updates);
+        _testFixture.BotMock.Setup(m => m.ReadNewMessages(It.IsAny<int>())).ReturnsAsync(updates);
 
         // Act
         var result = await _testFixture.TelegramBotTools.ReadNewMessages();
 
         // Assert
-        var messagesSentAsResponse = JsonSerializer.Deserialize<List<TelegramBotTools.NewMessageDto>>(result);
+        var messagesSentAsResponse = JsonSerializer.Deserialize<List<NewMessageDto>>(result);
         Assert.NotNull(messagesSentAsResponse);
         Assert.Equal(updates.Length, messagesSentAsResponse.Count);
         Assert.All(messagesSentAsResponse, message =>
         {
-            var incomingMessage = updates.FirstOrDefault(u => u.Message!.Text == message.Message);
+            var incomingMessage = updates.FirstOrDefault(u => u.Text == message.Message);
             Assert.NotNull(incomingMessage);
-            Assert.Equal(incomingMessage.Message!.From!.Id, message.UserId);
-            Assert.Equal(incomingMessage.Message.From.Username, message.From);
+            Assert.Equal(incomingMessage.From.Id, message.UserId);
+            Assert.Equal(incomingMessage.From.Username, message.From);
         });
 
         // Verify persistence
@@ -42,13 +42,13 @@ public class ReadNewMessagesTests(ITestOutputHelper output) : IAsyncLifetime
         Assert.Equal(updates.Length, savedMessages.Count);
         Assert.All(savedMessages, savedMessage =>
         {
-            var incomingMessage = updates.FirstOrDefault(u => u.Message!.Text == savedMessage.Text);
+            var incomingMessage = updates.FirstOrDefault(u => u.Text == savedMessage.Text);
             Assert.NotNull(incomingMessage);
-            Assert.Equal(incomingMessage.Message!.Date.ToUniversalTime(), savedMessage.Timestamp);
-            Assert.Equal(incomingMessage.Message.Text, savedMessage.Text);
-            Assert.Equal(incomingMessage.Message.From!.Username, savedMessage.User.Username);
-            Assert.Equal(incomingMessage.Message.From.FirstName, savedMessage.User.FirstName);
-            Assert.Equal(incomingMessage.Message.From.LastName, savedMessage.User.LastName);
+            Assert.Equal(incomingMessage.Timestamp.ToUniversalTime(), savedMessage.Timestamp);
+            Assert.Equal(incomingMessage.Text, savedMessage.Text);
+            Assert.Equal(incomingMessage.From.Username, savedMessage.User.Username);
+            Assert.Equal(incomingMessage.From.FirstName, savedMessage.User.FirstName);
+            Assert.Equal(incomingMessage.From.LastName, savedMessage.User.LastName);
         });
     }
 
@@ -56,7 +56,7 @@ public class ReadNewMessagesTests(ITestOutputHelper output) : IAsyncLifetime
     public async Task ReadNewMessages_NoMessages_ReturnsEmptyArray()
     {
         // Arrange
-        _testFixture.BotMock.Setup(m => m.GetUpdates(It.IsAny<int>())).ReturnsAsync([]);
+        _testFixture.BotMock.Setup(m => m.ReadNewMessages(It.IsAny<int>())).ReturnsAsync([]);
 
         // Act
         var result = await _testFixture.TelegramBotTools.ReadNewMessages();
@@ -70,7 +70,7 @@ public class ReadNewMessagesTests(ITestOutputHelper output) : IAsyncLifetime
     public async Task ReadNewMessages_ExceptionThrown_ReturnsErrorMessage()
     {
         // Arrange
-        _testFixture.BotMock.Setup(m => m.GetUpdates(It.IsAny<int>())).ThrowsAsync(new Exception("Test exception"));
+        _testFixture.BotMock.Setup(m => m.ReadNewMessages(It.IsAny<int>())).ThrowsAsync(new Exception("Test exception"));
 
         // Act
         var result = await _testFixture.TelegramBotTools.ReadNewMessages();
