@@ -4,7 +4,7 @@ using System.ComponentModel;
 using Telegram.Bot.MCP.Application.Commands;
 using Telegram.Bot.MCP.Application.Queries;
 
-namespace Telegram.Bot.MCP;
+namespace Telegram.Bot.MCP.Infra.Host;
 
 [McpServerToolType]
 public sealed class TelegramBotTools(IMediator mediator)

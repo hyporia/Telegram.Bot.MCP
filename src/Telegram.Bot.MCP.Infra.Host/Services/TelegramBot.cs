@@ -1,7 +1,7 @@
 ﻿using Telegram.Bot.MCP.Application.Interfaces;
 using Telegram.Bot.Types.Enums;
 
-namespace Telegram.Bot.MCP.Services;
+namespace Telegram.Bot.MCP.Infra.Host.Services;
 
 internal class TelegramBot(ITelegramBotClient botClient) : ITelegramBot
 {

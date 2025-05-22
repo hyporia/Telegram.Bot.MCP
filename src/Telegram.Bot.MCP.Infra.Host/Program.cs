@@ -7,11 +7,11 @@ using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using Telegram.Bot;
-using Telegram.Bot.MCP;
 using Telegram.Bot.MCP.Application.Interfaces;
+using Telegram.Bot.MCP.Infra.Host;
+using Telegram.Bot.MCP.Infra.Host.Services;
 using Telegram.Bot.MCP.Infra.Persistance;
 using Telegram.Bot.MCP.Infra.Persistance.Repositories;
-using Telegram.Bot.MCP.Services;
 
 var builder = Host.CreateEmptyApplicationBuilder(new HostApplicationBuilderSettings
 {
