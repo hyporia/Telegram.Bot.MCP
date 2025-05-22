@@ -65,14 +65,15 @@ public class TelegramRepository : ITelegramRepository
         return await UpdateUserAsync(user);
     }
 
-    public async Task<List<Domain.User>> GetAllUsersAsync() => await _context.Users.ToListAsync();
-
-    public async Task<List<Domain.User>> GetAdminUsersAsync()
+    public async Task<List<Domain.User>> GetAllUsersAsync() => await _context.Users.ToListAsync(); public async Task<List<Domain.User>> GetAdminUsersAsync()
     {
         return await _context.Users
             .Where(u => u.IsAdmin)
             .ToListAsync();
     }
+
+    public Task<Domain.User?> GetMeAsync() => _context.Users.FirstOrDefaultAsync(u => u.IsMe);
+
 
     public async Task<bool> SetUserAdminStatusAsync(long userId, bool isAdmin)
     {
@@ -85,6 +86,28 @@ public class TelegramRepository : ITelegramRepository
         user.IsAdmin = isAdmin;
         _context.Users.Update(user);
         await _context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> SetMeAsync(long userId)
+    {
+        // First, reset IsMe flag for all users
+        var users = await _context.Users.Where(u => u.IsMe).ToListAsync();
+        foreach (var user in users)
+        {
+            user.IsMe = false;
+        }
+
+        // Now set the specified user as "Me"
+        var meUser = await _context.Users.FindAsync(userId);
+        if (meUser == null)
+        {
+            return false;
+        }
+
+        meUser.IsMe = true;
+        await _context.SaveChangesAsync();
+        _logger.LogInformation("User {userId} set as 'Me'", userId);
         return true;
     }
 

@@ -10,7 +10,7 @@ internal class TelegramBot(ITelegramBotClient botClient) : ITelegramBot
         => await botClient.SendMessage(
                chatId: chatId,
                text: text,
-               parseMode: ParseMode.MarkdownV2);
+               parseMode: ParseMode.None);
 
     /// <inheritdoc/>
     public async Task<IEnumerable<Message>> ReadNewMessages(int limit)

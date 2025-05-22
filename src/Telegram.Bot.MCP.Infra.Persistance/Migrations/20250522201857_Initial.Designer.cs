@@ -11,7 +11,7 @@ using Telegram.Bot.MCP.Infra.Persistance;
 namespace Telegram.Bot.MCP.Infra.Persistance.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250423231754_Initial")]
+    [Migration("20250522201857_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -64,6 +64,9 @@ namespace Telegram.Bot.MCP.Infra.Persistance.Migrations
                     b.Property<bool>("IsAdmin")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("IsMe")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("LastName")
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
@@ -76,6 +79,10 @@ namespace Telegram.Bot.MCP.Infra.Persistance.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("IsAdmin");
+
+                    b.HasIndex("IsMe")
+                        .IsUnique()
+                        .HasFilter("IsMe = 1");
 
                     b.HasIndex("Username");
 

@@ -1,11 +1,15 @@
-﻿using Mediator;
+﻿using ModelContextProtocol.Server;
+using System.ComponentModel;
 using System.Text.Json;
 using Telegram.Bot.MCP.Application.Interfaces;
 
-namespace Telegram.Bot.MCP.Application.Queries;
-public class GetAllUsersQueryHandler(ITelegramRepository repository) : IRequestHandler<GetAllUsersQuery, string>
+namespace Telegram.Bot.MCP.Application.Tools;
+
+[McpServerToolType]
+public class GetAllUsersTool(ITelegramRepository repository)
 {
-    public async ValueTask<string> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
+    [McpServerTool, Description("Get all users")]
+    public async ValueTask<string> GetAllUsers(CancellationToken cancellationToken)
     {
         var users = await repository.GetAllUsersAsync();
 
@@ -20,9 +24,4 @@ public class GetAllUsersQueryHandler(ITelegramRepository repository) : IRequestH
 
         return JsonSerializer.Serialize(formattedUsers);
     }
-}
-
-public class GetAllUsersQuery : IRequest<string>
-{
-    public GetAllUsersQuery() { }
 }

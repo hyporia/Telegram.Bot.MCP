@@ -4,7 +4,7 @@ using Moq;
 using System.Text.Json;
 using Telegram.Bot.MCP.Application.Interfaces;
 using TelegramBotMCP.Tests._seedWork;
-using static Telegram.Bot.MCP.Application.Commands.ReadNewMessagesCommandHandler;
+using static Telegram.Bot.MCP.Application.Tools.ReadNewMessagesTool;
 
 namespace TelegramBotMCP.Tests;
 

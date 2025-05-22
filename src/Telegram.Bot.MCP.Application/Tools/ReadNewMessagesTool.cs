@@ -1,18 +1,20 @@
-﻿using Mediator;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
+using ModelContextProtocol.Server;
+using System.ComponentModel;
 using System.Text.Json;
 using Telegram.Bot.MCP.Application.Interfaces;
 
-namespace Telegram.Bot.MCP.Application.Commands;
+namespace Telegram.Bot.MCP.Application.Tools;
 
-public class ReadNewMessagesCommandHandler(ITelegramBot telegramBot, ITelegramRepository repository, ILogger<ReadNewMessagesCommandHandler> logger)
-    : IRequestHandler<ReadNewMessagesCommand, string>
+[McpServerToolType]
+public class ReadNewMessagesTool(ITelegramBot telegramBot, ITelegramRepository repository, ILogger<ReadNewMessagesTool> logger)
 {
-    public async ValueTask<string> Handle(ReadNewMessagesCommand request, CancellationToken cancellationToken)
+    [McpServerTool, Description("Read new messages.")]
+    public async ValueTask<string> ReadNewMessages([Description("Maximum number of messages")] int limit)
     {
         try
         {
-            var messages = await telegramBot.ReadNewMessages(100);
+            var messages = await telegramBot.ReadNewMessages(limit);
 
             var result = new List<NewMessageDto>();
 
@@ -51,10 +53,4 @@ public class ReadNewMessagesCommandHandler(ITelegramBot telegramBot, ITelegramRe
     }
 
     public record NewMessageDto(string Message, string From, long UserId);
-}
-
-public sealed class ReadNewMessagesCommand : IRequest<string>
-{
-    public int Limit { get; }
-    public ReadNewMessagesCommand(int limit) => Limit = limit;
 }

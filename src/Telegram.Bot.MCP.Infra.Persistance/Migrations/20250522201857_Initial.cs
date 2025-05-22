@@ -20,7 +20,8 @@ namespace Telegram.Bot.MCP.Infra.Persistance.Migrations
                     Username = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     FirstName = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
                     LastName = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
-                    IsAdmin = table.Column<bool>(type: "INTEGER", nullable: false)
+                    IsAdmin = table.Column<bool>(type: "INTEGER", nullable: false),
+                    IsMe = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -68,6 +69,13 @@ namespace Telegram.Bot.MCP.Infra.Persistance.Migrations
                 name: "IX_Users_IsAdmin",
                 table: "Users",
                 column: "IsAdmin");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_IsMe",
+                table: "Users",
+                column: "IsMe",
+                unique: true,
+                filter: "IsMe = 1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Username",

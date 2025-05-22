@@ -1,12 +1,15 @@
-using Mediator;
+using ModelContextProtocol.Server;
+using System.ComponentModel;
 using Telegram.Bot.MCP.Application.Interfaces;
 
-namespace Telegram.Bot.MCP.Application.Commands;
+namespace Telegram.Bot.MCP.Application.Tools;
 
-public class SendMessageToAdminCommandHandler(ITelegramBot telegramBot, ITelegramRepository repository)
-    : IRequestHandler<SendMessageToAdminCommand, string>
+[McpServerToolType]
+public class SendMessageToAdminTool(ITelegramBot telegramBot, ITelegramRepository repository)
 {
-    public async ValueTask<string> Handle(SendMessageToAdminCommand request, CancellationToken cancellationToken)
+    [McpServerTool, Description("Send message to all admin users")]
+    public async ValueTask<string> SendMessageToAdmin(
+        [Description("The message text to send to all admins")] string messageText)
     {
         try
         {
@@ -24,14 +27,14 @@ public class SendMessageToAdminCommandHandler(ITelegramBot telegramBot, ITelegra
             {
                 try
                 {
-                    var message = new Domain.Message(admin, request.MessageText, DateTime.UtcNow, false);
+                    var message = new Domain.Message(admin, messageText, DateTime.UtcNow, false);
                     // Save the outgoing message to the database
                     await repository.SaveMessageAsync(message); // false = message is from bot
 
                     // Send the message via Telegram API
                     await telegramBot.SendMessage(
                         userId: admin.Id,
-                        text: request.MessageText);
+                        text: messageText);
 
                     successCount++;
                 }
@@ -54,11 +57,4 @@ public class SendMessageToAdminCommandHandler(ITelegramBot telegramBot, ITelegra
             return $"Failed to send message to admins: {ex.Message}";
         }
     }
-}
-
-public sealed class SendMessageToAdminCommand : IRequest<string>
-{
-    public string MessageText { get; }
-
-    public SendMessageToAdminCommand(string messageText) => MessageText = messageText;
 }
