@@ -1,14 +1,8 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace Telegram.Bot.MCP.Domain;
 
 public class Message
 {
-    [Key]
     public long Id { get; private set; }
-
-    [ForeignKey("User")]
     public long UserId { get; private set; }
     public User User { get; private set; }
 

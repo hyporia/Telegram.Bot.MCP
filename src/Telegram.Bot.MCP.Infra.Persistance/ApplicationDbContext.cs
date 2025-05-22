@@ -7,6 +7,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Message> Messages { get; set; }
+    public DbSet<Group> Groups { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -32,6 +33,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             entity.HasIndex(e => e.IsMe)
                 .HasFilter("IsMe = 1")
                 .IsUnique();
+
+            entity.HasMany(u => u.Groups)
+                .WithMany(g => g.Users)
+                .UsingEntity(j => j.ToTable("UserGroups"));
         });
 
         modelBuilder.Entity<Message>(entity =>
@@ -56,6 +61,18 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                   .WithMany()
                   .HasForeignKey(e => e.UserId)
                   .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<Group>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+
+            entity.Property(e => e.Name)
+                  .IsRequired()
+                  .HasMaxLength(100);
+
+            entity.HasIndex(e => e.Name)
+                  .IsUnique();
         });
     }
 }

@@ -23,7 +23,7 @@ public class ReadNewMessagesTests(ITestOutputHelper output) : IAsyncLifetime
         _testFixture.BotMock.Setup(m => m.ReadNewMessages(It.IsAny<int>())).ReturnsAsync(updates);
 
         // Act
-        var result = await _testFixture.SUT.Handle(new(100), CancellationToken.None);
+        var result = await _testFixture.SUT.ReadNewMessages(100);
 
         // Assert
         var messagesSentAsResponse = JsonSerializer.Deserialize<List<NewMessageDto>>(result);
@@ -59,7 +59,7 @@ public class ReadNewMessagesTests(ITestOutputHelper output) : IAsyncLifetime
         _testFixture.BotMock.Setup(m => m.ReadNewMessages(It.IsAny<int>())).ReturnsAsync([]);
 
         // Act
-        var result = await _testFixture.SUT.Handle(new(100), CancellationToken.None);
+        var result = await _testFixture.SUT.ReadNewMessages(100);
 
         // Assert
         Assert.NotNull(result);
@@ -73,7 +73,7 @@ public class ReadNewMessagesTests(ITestOutputHelper output) : IAsyncLifetime
         _testFixture.BotMock.Setup(m => m.ReadNewMessages(It.IsAny<int>())).ThrowsAsync(new Exception("Test exception"));
 
         // Act
-        var result = await _testFixture.SUT.Handle(new(100), CancellationToken.None);
+        var result = await _testFixture.SUT.ReadNewMessages(100);
 
         // Assert
         Assert.NotEmpty(result);

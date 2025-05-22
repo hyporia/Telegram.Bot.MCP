@@ -9,6 +9,8 @@ public class User : IEquatable<User>
     public bool IsAdmin { get; set; }
     public bool IsMe { get; set; }
 
+    public virtual ICollection<Group> Groups { get; private set; } = [];
+
     public User(long id, string username, string? firstName, string? lastName, bool isAdmin, bool isMe = false)
     {
         Id = id;
@@ -22,6 +24,25 @@ public class User : IEquatable<User>
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     private User() { }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+
+    // Helper methods to manage group memberships
+    public void AddToGroup(Group group)
+    {
+        if (!Groups.Contains(group))
+        {
+            Groups.Add(group);
+        }
+    }
+
+    public void RemoveFromGroup(Group group)
+    {
+        if (Groups.Contains(group))
+        {
+            Groups.Remove(group);
+        }
+    }
+
+    public bool IsMemberOf(int groupId) => Groups.Any(g => g.Id == groupId);
 
     public bool Equals(User? other)
     {
