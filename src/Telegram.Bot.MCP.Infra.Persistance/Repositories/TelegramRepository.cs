@@ -64,29 +64,8 @@ public class TelegramRepository : ITelegramRepository
         return await UpdateUserAsync(user);
     }
 
-    public async Task<List<Domain.User>> GetAllUsersAsync() => await _context.Users.ToListAsync(); public async Task<List<Domain.User>> GetAdminUsersAsync()
-    {
-        return await _context.Users
-            .Where(u => u.IsAdmin)
-            .ToListAsync();
-    }
-
+    public async Task<List<Domain.User>> GetAllUsersAsync() => await _context.Users.ToListAsync();
     public Task<Domain.User?> GetMeAsync() => _context.Users.FirstOrDefaultAsync(u => u.IsMe);
-
-
-    public async Task<bool> SetUserAdminStatusAsync(long userId, bool isAdmin)
-    {
-        var user = await _context.Users.FindAsync(userId);
-        if (user == null)
-        {
-            return false;
-        }
-
-        user.IsAdmin = isAdmin;
-        _context.Users.Update(user);
-        await _context.SaveChangesAsync();
-        return true;
-    }
 
     public async Task<bool> SetMeAsync(long userId)
     {

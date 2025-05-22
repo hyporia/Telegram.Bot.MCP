@@ -11,7 +11,7 @@ using Telegram.Bot.MCP.Infra.Persistance;
 namespace Telegram.Bot.MCP.Infra.Persistance.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250522201857_Initial")]
+    [Migration("20250522211536_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -19,6 +19,40 @@ namespace Telegram.Bot.MCP.Infra.Persistance.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.4");
+
+            modelBuilder.Entity("GroupUser", b =>
+                {
+                    b.Property<int>("GroupsId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("UsersId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("GroupsId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("UserGroups", (string)null);
+                });
+
+            modelBuilder.Entity("Telegram.Bot.MCP.Domain.Group", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Groups");
+                });
 
             modelBuilder.Entity("Telegram.Bot.MCP.Domain.Message", b =>
                 {
@@ -61,9 +95,6 @@ namespace Telegram.Bot.MCP.Infra.Persistance.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("IsAdmin")
-                        .HasColumnType("INTEGER");
-
                     b.Property<bool>("IsMe")
                         .HasColumnType("INTEGER");
 
@@ -78,8 +109,6 @@ namespace Telegram.Bot.MCP.Infra.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IsAdmin");
-
                     b.HasIndex("IsMe")
                         .IsUnique()
                         .HasFilter("IsMe = 1");
@@ -87,6 +116,21 @@ namespace Telegram.Bot.MCP.Infra.Persistance.Migrations
                     b.HasIndex("Username");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("GroupUser", b =>
+                {
+                    b.HasOne("Telegram.Bot.MCP.Domain.Group", null)
+                        .WithMany()
+                        .HasForeignKey("GroupsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Telegram.Bot.MCP.Domain.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Telegram.Bot.MCP.Domain.Message", b =>

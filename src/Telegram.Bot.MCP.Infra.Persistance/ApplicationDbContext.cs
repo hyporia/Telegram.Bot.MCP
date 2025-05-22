@@ -28,8 +28,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
             entity.HasIndex(e => e.Username);
 
-            entity.HasIndex(e => e.IsAdmin);
-
             entity.HasIndex(e => e.IsMe)
                 .HasFilter("IsMe = 1")
                 .IsUnique();

@@ -27,8 +27,7 @@ public class GetGroupUsersTool(ITelegramRepository repository, ILogger<GetGroupU
                 u.Id,
                 u.Username,
                 u.FirstName,
-                u.LastName,
-                u.IsAdmin
+                u.LastName
             }).ToList();
 
             return JsonSerializer.Serialize(formattedUsers);

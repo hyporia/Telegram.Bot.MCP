@@ -6,18 +6,16 @@ public class User : IEquatable<User>
     public string Username { get; private set; }
     public string? FirstName { get; private set; }
     public string? LastName { get; private set; }
-    public bool IsAdmin { get; set; }
     public bool IsMe { get; set; }
 
     public virtual ICollection<Group> Groups { get; private set; } = [];
 
-    public User(long id, string username, string? firstName, string? lastName, bool isAdmin, bool isMe = false)
+    public User(long id, string username, string? firstName, string? lastName, bool isMe = false)
     {
         Id = id;
         Username = username;
         FirstName = firstName;
         LastName = lastName;
-        IsAdmin = isAdmin;
         IsMe = isMe;
     }
 

@@ -92,9 +92,6 @@ namespace Telegram.Bot.MCP.Infra.Persistance.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("IsAdmin")
-                        .HasColumnType("INTEGER");
-
                     b.Property<bool>("IsMe")
                         .HasColumnType("INTEGER");
 
@@ -108,8 +105,6 @@ namespace Telegram.Bot.MCP.Infra.Persistance.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("IsAdmin");
 
                     b.HasIndex("IsMe")
                         .IsUnique()
