@@ -1,30 +1,51 @@
 # Telegram.Bot.MCP
 
-Telegram.Bot.MCP is a .NET 9.0 console application that implements a Telegram bot integrated with a Model Context Protocol (MCP) server. It allows your local agent to communicate with Telegram users via a bot account.
+## Overview
+
+Telegram.Bot.MCP serves as a bridge between AI agents (like GitHub Copilot) and the Telegram messaging platform. The application allows AI assistants to interact with Telegram users via a bot, maintain user information in a SQLite database, and can be configured and run via Docker.
 
 ## Features
 
--   Send messages to a user
--   Send messages to an admin user
--   Get new messages
+### Message Management
 
-## Getting Started
+-   Read new messages from Telegram users
+-   Send messages to specific users
+-   Send messages to the current user marked as "Me"
 
-### Prerequisites
+### User Management
 
--   Docker or another app to work with containers
+-   Store and retrieve user data (ID, username, first name, last name)
+-   Set a specific user as "Me" to enable direct interactions
+-   View all registered users
+-   View conversation history with users
 
-### Configuration
+### Group Management
 
--   Set your Telegram bot token in the environment variable `TELEGRAM_BOT_TOKEN`.
--   Send a message to your bot.
--   Ask the agent to fetch new messages. It will also store the user who wrote to the bot in its SQLite database. The agent will provide the user's information along with the messages.
--   Ask the agent to send a message to the user.
--   You can also assign admin status to some users and send messages to all admins.
+-   Create user groups (not Telegram groups, but logical groups for managing users)
+-   Add/remove users to/from groups
+-   List all groups and their members
+-   Get groups a user belongs to
+-   Broadcast messages to all members of a group
 
-### How I use it
+## Quickstart Guide
 
-I [configured the `msp.json` file for my VSCode](https://code.visualstudio.com/docs/copilot/chat/mcp-servers) in the following way:
+### Step 1: Set up a Telegram Bot
+
+1. Create a new bot through [@BotFather](https://t.me/botfather) in Telegram
+2. Copy your bot token (looks like `123456789:ABCdefGhIjKlmNoPQRsTUVwxYZ`)
+
+### Step 2: Run using Docker
+
+```bash
+# Pull and run the container
+docker run -d --name telegram-bot-mcp \
+  -e TELEGRAM_BOT_TOKEN=your_token_here \
+  telegrambotmcp:latest
+```
+
+### Step 3: Configure VSCode for MCP
+
+Create an `mcp.json` file in your `.vscode` folder with the following configuration:
 
 ```Json
 {
@@ -55,11 +76,26 @@ I [configured the `msp.json` file for my VSCode](https://code.visualstudio.com/d
 }
 ```
 
-After I did that, Copilot in agent mode was able to see TelegramBotMCP tools and use them.
+### Step 4: Use the Bot with Copilot
 
-### Docker
+1. Start Copilot Chat in VS Code and prompt: "Connect to telegram-bot server"
+2. When prompted, enter your Telegram bot token
+3. Send a message to your bot in Telegram
+4. In Copilot Chat, ask: "Read all messages using available tool"
+5. Try other commands like:
+    - "Send a message to user 123456789"
+    - "Create group named Admins"
+    - "Add user 123456789 to Admins group"
 
-A `Dockerfile` is provided for containerized deployment.
+### Building from Source
+
+A `Dockerfile` is provided in the repository for building your own container image:
+
+```bash
+git clone https://github.com/hyporia/Telegram.Bot.MCP.git
+cd Telegram.Bot.MCP
+docker build -t telegrambotmcp:latest .
+```
 
 ## License
 

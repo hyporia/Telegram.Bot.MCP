@@ -1,0 +1,63 @@
+# Ignore Visual Studio files
+.vs/
+.vscode/
+**/*.user
+**/*.userosscache
+**/*.suo
+**/*.dbmdl
+**/*.jfm
+**/*.pfx
+**/*.publishsettings
+**/*.pdb
+**/*.psess
+**/*.vsp
+**/*.vspx
+**/*.sap
+
+# Ignore build outputs
+**/bin/
+**/obj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Ignore NuGet packages
+*.nuget.props
+*.nuget.targets
+**/packages/*
+!**/packages/build/
+*.nupkg
+
+# Ignore development files
+*.DotSettings
+*.DotSettings.user
+
+# Ignore test results
+TestResults/
+[Tt]est[Rr]esult*/
+coverage*.xml
+*.coverage
+*.coveragexml
+
+# Ignore git and GitHub files
+.git/
+.github/
+.gitattributes
+.gitignore
+**/.git
+
+# Ignore misc files
+*.swp
+*.bak
+*.tmp
+*.log
+.DS_Store
+Thumbs.db

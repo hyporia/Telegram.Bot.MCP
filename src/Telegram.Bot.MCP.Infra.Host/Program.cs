@@ -50,7 +50,8 @@ builder.Services
 var token = builder.Configuration["TELEGRAM_BOT_TOKEN"];
 if (string.IsNullOrEmpty(token))
 {
-    throw new ArgumentException("Bot token is not set. Please set the BotToken in the configuration.");
+    Console.Error.WriteLine("Bot token is not set. Please provide bot token in 'TELEGRAM_BOT_TOKEN' environment variable.");
+    return 1;
 }
 builder.Services
     .AddTransient<ITelegramBot, TelegramBot>()
@@ -94,3 +95,4 @@ await using (var scope = app.Services.CreateAsyncScope())
 }
 
 await app.RunAsync();
+return 0;
