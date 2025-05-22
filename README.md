@@ -29,21 +29,25 @@ Telegram.Bot.MCP serves as a bridge between AI agents (like GitHub Copilot) and 
 
 ## Quickstart Guide
 
-### Step 1: Set up a Telegram Bot
+### Start with Docker
+
+#### Step 1: Set up a Telegram Bot
 
 1. Create a new bot through [@BotFather](https://t.me/botfather) in Telegram
 2. Copy your bot token (looks like `123456789:ABCdefGhIjKlmNoPQRsTUVwxYZ`)
 
-### Step 2: Run using Docker
+#### Step 2: Run using Docker
 
 ```bash
 # Pull and run the container
-docker run -d --name telegram-bot-mcp \ 
+docker run -d --name telegram-bot-mcp \
     -e TELEGRAM_BOT_TOKEN=your_token_here \
     hyporia123/telegram-bot-mcp:latest
 ```
 
-### Step 3: Configure VSCode for MCP
+### Integrate with GitHub Copilot in VSCode
+
+#### Step 1: Configure VSCode
 
 Create an `mcp.json` file in your `.vscode` folder with the following configuration:
 
@@ -66,7 +70,7 @@ Create an `mcp.json` file in your `.vscode` folder with the following configurat
                 "--rm",
                 "-e",
                 "TELEGRAM_BOT_TOKEN",
-                "telegrambotmcp:latest"
+                "hyporia123/telegram-bot-mcp"
             ],
             "env": {
                 "TELEGRAM_BOT_TOKEN": "${input:telegram_bot_token}"
@@ -76,16 +80,23 @@ Create an `mcp.json` file in your `.vscode` folder with the following configurat
 }
 ```
 
-### Step 4: Use the Bot with Copilot
+#### Step 2: Use the Bot with Copilot
 
-1. Start Copilot Chat in VS Code and prompt: "Connect to telegram-bot server"
-2. When prompted, enter your Telegram bot token
-3. Send a message to your bot in Telegram
-4. In Copilot Chat, ask: "Read all messages using available tool"
-5. Try other commands like:
+1. When prompted, enter your Telegram bot token
+2. Send a message to your bot in Telegram
+3. In Copilot Chat, ask: "Read all messages using available tool"
+4. Try other commands like:
     - "Send a message to user 123456789"
     - "Create group named Admins"
     - "Add user 123456789 to Admins group"
+
+#### PS: you can also add this MCP server manually in the Copilot Chat settings in VSCode.
+
+1. Open Copilot Chat
+2. Switch to agent mode
+3. Click on 'Select tools' icon
+4. Scroll down to the bottom and click on 'Add more tools'
+5. Follow the instructions to add telegram-bot-mcp as a new tool
 
 ### Building from Source
 
@@ -94,7 +105,7 @@ A `Dockerfile` is provided in the repository for building your own container ima
 ```bash
 git clone https://github.com/hyporia/Telegram.Bot.MCP.git
 cd Telegram.Bot.MCP
-docker build -t telegrambotmcp:latest .
+docker build -t telegram-bot-mcp:latest .
 ```
 
 ## License
