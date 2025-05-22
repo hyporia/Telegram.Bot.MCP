@@ -38,9 +38,9 @@ Telegram.Bot.MCP serves as a bridge between AI agents (like GitHub Copilot) and 
 
 ```bash
 # Pull and run the container
-docker run -d --name telegram-bot-mcp \
-  -e TELEGRAM_BOT_TOKEN=your_token_here \
-  telegrambotmcp:latest
+docker run -d --name telegram-bot-mcp \ 
+    -e TELEGRAM_BOT_TOKEN=your_token_here \
+    hyporia123/telegram-bot-mcp:latest
 ```
 
 ### Step 3: Configure VSCode for MCP
