@@ -61,3 +61,21 @@ coverage*.xml
 *.log
 .DS_Store
 Thumbs.db
+
+# Ignore documentation and markdown files
+README.md
+**/*.md
+docs/
+
+# Ignore database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Ignore environment files
+.env
+.env.*
+
+# Ignore Docker files themselves
+Dockerfile*
+.dockerignore

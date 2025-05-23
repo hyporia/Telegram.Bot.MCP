@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
+using System.Runtime;
 using Telegram.Bot;
 using Telegram.Bot.MCP.Application.Interfaces;
 using Telegram.Bot.MCP.Application.Tools;
@@ -28,17 +29,34 @@ builder.Configuration.AddConfiguration(configuration);
 
 builder.Logging.ClearProviders()
     .AddConfiguration(builder.Configuration.GetSection("Logging"))
-    .AddConsole(x => x.LogToStandardErrorThreshold = LogLevel.Trace)
-    .AddOpenTelemetry(x =>
+    .AddConsole(x => x.LogToStandardErrorThreshold = LogLevel.Trace);
+
+// Add OpenTelemetry only if configured
+var otlpEndpoint = builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"];
+if (!string.IsNullOrEmpty(otlpEndpoint))
+{
+    builder.Logging.AddOpenTelemetry(x =>
     {
         x.IncludeScopes = true;
         x.IncludeFormattedMessage = true;
     });
-
-var dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "telegram.db");
+}
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite($"Data Source={dbPath}"));
+{
+    options.UseSqlite(configuration.GetConnectionString("DefaultConnection")!, sqliteOptions =>
+    {
+        sqliteOptions.CommandTimeout(30);
+    });
+
+    if (builder.Environment.IsProduction())
+    {
+        options.EnableSensitiveDataLogging(false);
+        options.EnableDetailedErrors(false);
+    }
+
+    options.EnableServiceProviderCaching();
+});
 builder.Services.AddTransient<ITelegramRepository, TelegramRepository>();
 
 builder.Services
@@ -57,34 +75,31 @@ builder.Services
     .AddTransient<ITelegramBot, TelegramBot>()
     .AddHttpClient<ITelegramBotClient, TelegramBotClient>(httpClient => new(token, httpClient));
 
-builder.Services.AddOpenTelemetry()
-    .WithTracing(builder =>
-    {
-        builder
-            .AddEntityFrameworkCoreInstrumentation()
-            .AddHttpClientInstrumentation()
-            .AddOtlpExporter();
-    })
-    .WithMetrics(builder =>
-    {
-        builder
-            .AddHttpClientInstrumentation()
-            .AddOtlpExporter();
-    })
-    .WithLogging(x => x.AddOtlpExporter());
+if (!string.IsNullOrEmpty(otlpEndpoint))
+{
+    builder.Services.AddOpenTelemetry()
+        .WithTracing(builder =>
+        {
+            builder
+                .AddEntityFrameworkCoreInstrumentation()
+                .AddHttpClientInstrumentation()
+                .AddOtlpExporter();
+        })
+        .WithMetrics(builder =>
+        {
+            builder
+                .AddHttpClientInstrumentation()
+                .AddOtlpExporter();
+        })
+        .WithLogging(x => x.AddOtlpExporter());
+}
 
 var app = builder.Build();
 
 await using (var scope = app.Services.CreateAsyncScope())
 {
     var logger = scope.ServiceProvider.GetRequiredService<ILogger<ApplicationDbContext>>();
-
-    if (!Directory.Exists(Path.GetDirectoryName(dbPath)!))
-    {
-        Directory.CreateDirectory(Path.GetDirectoryName(dbPath)!);
-        logger.LogInformation("Directory for SQLite database created successfully.");
-    }
-
+    
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     var pendingMigrations = await dbContext.Database.GetPendingMigrationsAsync();
     if (pendingMigrations.Any())
