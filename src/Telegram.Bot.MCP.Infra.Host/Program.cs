@@ -20,7 +20,6 @@ var builder = Host.CreateEmptyApplicationBuilder(new HostApplicationBuilderSetti
 
 var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
     .AddUserSecrets<Program>(optional: true, reloadOnChange: true)
     .AddEnvironmentVariables()
     .Build();
@@ -28,6 +27,7 @@ var configuration = new ConfigurationBuilder()
 builder.Configuration.AddConfiguration(configuration);
 
 builder.Logging.ClearProviders()
+    .AddConfiguration(builder.Configuration.GetSection("Logging"))
     .AddConsole(x => x.LogToStandardErrorThreshold = LogLevel.Trace)
     .AddOpenTelemetry(x =>
     {

@@ -8,24 +8,24 @@ Telegram.Bot.MCP serves as a bridge between AI agents (like GitHub Copilot) and 
 
 ### Message Management
 
--   Read new messages from Telegram users
--   Send messages to specific users
--   Send messages to the current user marked as "Me"
+- Read new messages from Telegram users
+- Send messages to specific users
+- Send messages to the current user marked as "Me"
 
 ### User Management
 
--   Store and retrieve user data (ID, username, first name, last name)
--   Set a specific user as "Me" to enable direct interactions
--   View all registered users
--   View conversation history with users
+- Store and retrieve user data (ID, username, first name, last name)
+- Set a specific user as "Me" to enable direct interactions
+- View all registered users
+- View conversation history with users
 
 ### Group Management
 
--   Create user groups (not Telegram groups, but logical groups for managing users)
--   Add/remove users to/from groups
--   List all groups and their members
--   Get groups a user belongs to
--   Broadcast messages to all members of a group
+- Create user groups (not Telegram groups, but logical groups for managing users)
+- Add/remove users to/from groups
+- List all groups and their members
+- Get groups a user belongs to
+- Broadcast messages to all members of a group
 
 ## Quickstart Guide
 
@@ -70,7 +70,7 @@ Create an `mcp.json` file in your `.vscode` folder with the following configurat
                 "--rm",
                 "-e",
                 "TELEGRAM_BOT_TOKEN",
-                "hyporia123/telegram-bot-mcp"
+                "hyporia123/telegram-bot-mcp:latest"
             ],
             "env": {
                 "TELEGRAM_BOT_TOKEN": "${input:telegram_bot_token}"
@@ -86,9 +86,9 @@ Create an `mcp.json` file in your `.vscode` folder with the following configurat
 2. Send a message to your bot in Telegram
 3. In Copilot Chat, ask: "Read all messages using available tool"
 4. Try other commands like:
-    - "Send a message to user 123456789"
-    - "Create group named Admins"
-    - "Add user 123456789 to Admins group"
+   - "Send a message to user 123456789"
+   - "Create group named Admins"
+   - "Add user 123456789 to Admins group"
 
 #### PS: you can also add this MCP server manually in the Copilot Chat settings in VSCode.
 
