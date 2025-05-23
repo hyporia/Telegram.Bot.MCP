@@ -15,7 +15,7 @@ COPY --from=build /app/publish .
 RUN mkdir -p /var/lib/telegram-bot-mcp && \
     chown -R appuser:appgroup /var/lib/telegram-bot-mcp && \
     chmod 755 /var/lib/telegram-bot-mcp
-fv
+
 # Set connection string to use standard Alpine data directory
 ENV ConnectionStrings__DefaultConnection="Data Source=/var/lib/telegram-bot-mcp/telegram.db"
 
