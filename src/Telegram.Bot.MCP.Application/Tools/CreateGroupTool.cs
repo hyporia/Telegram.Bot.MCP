@@ -19,7 +19,7 @@ public class CreateGroupTool(ITelegramRepository repository, ILogger<CreateGroup
             if (existingGroup != null)
             {
                 logger.LogWarning("Failed to create group: Group with name '{groupName}' already exists", groupName);
-                return $"Failed to create group: Group with name '{groupName}' already exists";
+                return $"Group with name '{groupName}' already exists";
             }
 
             var group = new Domain.Group(groupName);

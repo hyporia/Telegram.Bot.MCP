@@ -19,7 +19,7 @@ public class GetGroupUsersTool(ITelegramRepository repository, ILogger<GetGroupU
             if (group == null)
             {
                 logger.LogWarning("Failed to get group users: Group {groupId} not found", groupId);
-                return $"Failed to get users: Group {groupId} not found";
+                return $"Group {groupId} not found";
             }
 
             var formattedUsers = group.Users.Select(u => new

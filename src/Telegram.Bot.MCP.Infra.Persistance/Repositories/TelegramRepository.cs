@@ -4,19 +4,10 @@ using Telegram.Bot.MCP.Application.Interfaces;
 
 namespace Telegram.Bot.MCP.Infra.Persistance.Repositories;
 
-public class TelegramRepository : ITelegramRepository
+public class TelegramRepository(ApplicationDbContext context, ILogger<TelegramRepository> logger) : ITelegramRepository
 {
-    private readonly ApplicationDbContext _context;
-    private readonly ILogger<TelegramRepository> _logger;
-
-    public TelegramRepository(ApplicationDbContext context, ILogger<TelegramRepository> logger)
-    {
-        _context = context;
-        _logger = logger;
-    }
-
     public async Task<Domain.User?> GetUserByIdAsync(long userId)
-        => await _context.Users.FindAsync([userId]);
+        => await context.Users.FindAsync([userId]);
 
     public async Task<Domain.User> CreateUserAsync(Domain.User user)
     {
@@ -28,9 +19,9 @@ public class TelegramRepository : ITelegramRepository
             throw new InvalidOperationException($"User with ID {user.Id} already exists.");
         }
 
-        await _context.Users.AddAsync(user);
-        await _context.SaveChangesAsync();
-        _logger.LogInformation("User {userId} created successfully.", user.Id);
+        await context.Users.AddAsync(user);
+        await context.SaveChangesAsync();
+        logger.LogInformation("User {userId} created successfully.", user.Id);
         return user;
     }
 
@@ -46,9 +37,9 @@ public class TelegramRepository : ITelegramRepository
             return existingUser; // No changes made
         }
 
-        _context.Users.Update(user);
-        await _context.SaveChangesAsync();
-        _logger.LogInformation("User {userId} updated successfully.", user.Id);
+        context.Users.Update(user);
+        await context.SaveChangesAsync();
+        logger.LogInformation("User {userId} updated successfully.", user.Id);
         return user;
     }
 
@@ -64,41 +55,41 @@ public class TelegramRepository : ITelegramRepository
         return await UpdateUserAsync(user);
     }
 
-    public async Task<List<Domain.User>> GetAllUsersAsync() => await _context.Users.ToListAsync();
-    public Task<Domain.User?> GetMeAsync() => _context.Users.FirstOrDefaultAsync(u => u.IsMe);
+    public async Task<List<Domain.User>> GetAllUsersAsync() => await context.Users.ToListAsync();
+    public Task<Domain.User?> GetMeAsync() => context.Users.SingleOrDefaultAsync(u => u.IsMe);
 
     public async Task<bool> SetMeAsync(long userId)
     {
         // First, reset IsMe flag for all users
-        var users = await _context.Users.Where(u => u.IsMe).ToListAsync();
+        var users = await context.Users.Where(u => u.IsMe).ToListAsync();
         foreach (var user in users)
         {
             user.IsMe = false;
         }
 
         // Now set the specified user as "Me"
-        var meUser = await _context.Users.FindAsync(userId);
+        var meUser = await context.Users.FindAsync(userId);
         if (meUser == null)
         {
             return false;
         }
 
         meUser.IsMe = true;
-        await _context.SaveChangesAsync();
-        _logger.LogInformation("User {userId} set as 'Me'", userId);
+        await context.SaveChangesAsync();
+        logger.LogInformation("User {userId} set as 'Me'", userId);
         return true;
     }
 
     public async Task<Domain.Message> SaveMessageAsync(Domain.Message message)
     {
-        await _context.Messages.AddAsync(message);
-        await _context.SaveChangesAsync();
+        await context.Messages.AddAsync(message);
+        await context.SaveChangesAsync();
         return message;
     }
 
     public async Task<List<Domain.Message>> GetUserMessagesAsync(long userId, int limit = 50)
     {
-        return await _context.Messages
+        return await context.Messages
             .Where(m => m.UserId == userId)
             .OrderByDescending(m => m.Timestamp)
             .Take(limit)
@@ -107,13 +98,13 @@ public class TelegramRepository : ITelegramRepository
 
     // Group management methods
     public async Task<Domain.Group?> GetGroupByIdAsync(int groupId)
-        => await _context.Groups.Include(x => x.Users).FirstOrDefaultAsync(x => x.Id == groupId);
+        => await context.Groups.Include(x => x.Users).FirstOrDefaultAsync(x => x.Id == groupId);
 
     public async Task<Domain.Group?> GetGroupByNameAsync(string name)
-        => await _context.Groups.Include(x => x.Users).FirstOrDefaultAsync(x => x.Name == name);
+        => await context.Groups.Include(x => x.Users).FirstOrDefaultAsync(x => x.Name == name);
 
     public async Task<List<Domain.Group>> GetAllGroupsAsync()
-        => await _context.Groups.ToListAsync();
+        => await context.Groups.ToListAsync();
 
     public async Task<Domain.Group> CreateGroupAsync(Domain.Group group)
     {
@@ -125,9 +116,9 @@ public class TelegramRepository : ITelegramRepository
             throw new InvalidOperationException($"Group with name '{group.Name}' already exists.");
         }
 
-        await _context.Groups.AddAsync(group);
-        await _context.SaveChangesAsync();
-        _logger.LogInformation("Group '{groupName}' created successfully.", group.Name);
+        await context.Groups.AddAsync(group);
+        await context.SaveChangesAsync();
+        logger.LogInformation("Group '{groupName}' created successfully.", group.Name);
         return group;
     }
 
@@ -138,9 +129,9 @@ public class TelegramRepository : ITelegramRepository
         var existingGroup = await GetGroupByIdAsync(group.Id)
             ?? throw new InvalidOperationException($"Group with ID {group.Id} does not exist.");
 
-        _context.Entry(existingGroup).CurrentValues.SetValues(group);
-        await _context.SaveChangesAsync();
-        _logger.LogInformation("Group {groupId} updated successfully.", group.Id);
+        context.Entry(existingGroup).CurrentValues.SetValues(group);
+        await context.SaveChangesAsync();
+        logger.LogInformation("Group {groupId} updated successfully.", group.Id);
         return group;
     }
 
@@ -152,9 +143,9 @@ public class TelegramRepository : ITelegramRepository
             return false;
         }
 
-        _context.Groups.Remove(group);
-        await _context.SaveChangesAsync();
-        _logger.LogInformation("Group {groupId} deleted successfully.", groupId);
+        context.Groups.Remove(group);
+        await context.SaveChangesAsync();
+        logger.LogInformation("Group {groupId} deleted successfully.", groupId);
         return true;
     }
 
@@ -163,17 +154,17 @@ public class TelegramRepository : ITelegramRepository
         var user = await GetUserByIdAsync(userId);
         if (user == null)
         {
-            _logger.LogWarning("Failed to add user to group: User {userId} not found.", userId);
+            logger.LogWarning("Failed to add user to group: User {userId} not found.", userId);
             return false;
         }
 
-        var group = await _context.Groups
+        var group = await context.Groups
             .Include(g => g.Users)
             .FirstOrDefaultAsync(g => g.Id == groupId);
 
         if (group == null)
         {
-            _logger.LogWarning("Failed to add user to group: Group {groupId} not found.", groupId);
+            logger.LogWarning("Failed to add user to group: Group {groupId} not found.", groupId);
             return false;
         }
 
@@ -184,20 +175,14 @@ public class TelegramRepository : ITelegramRepository
         }
 
         group.AddUser(user);
-        await _context.SaveChangesAsync();
-        _logger.LogInformation("User {userId} added to group {groupId}.", userId, groupId);
+        await context.SaveChangesAsync();
+        logger.LogInformation("User {userId} added to group {groupId}.", userId, groupId);
         return true;
     }
 
     public async Task<bool> RemoveUserFromGroupAsync(long userId, int groupId)
     {
-        var user = await GetUserByIdAsync(userId);
-        if (user == null)
-        {
-            return false;
-        }
-
-        var group = await _context.Groups
+        var group = await context.Groups
             .Include(g => g.Users)
             .FirstOrDefaultAsync(g => g.Id == groupId);
 
@@ -206,21 +191,22 @@ public class TelegramRepository : ITelegramRepository
             return false;
         }
 
-        if (!group.Users.Any(u => u.Id == userId))
+        var user = group.Users.FirstOrDefault(u => u.Id == userId);
+        if (user == null)
         {
             // User is not in the group
             return true;
         }
 
         group.RemoveUser(user);
-        await _context.SaveChangesAsync();
-        _logger.LogInformation("User {userId} removed from group {groupId}.", userId, groupId);
+        await context.SaveChangesAsync();
+        logger.LogInformation("User {userId} removed from group {groupId}.", userId, groupId);
         return true;
     }
 
     public async Task<List<Domain.User>> GetUsersInGroupAsync(int groupId)
     {
-        var group = await _context.Groups
+        var group = await context.Groups
             .Include(g => g.Users)
             .FirstOrDefaultAsync(g => g.Id == groupId);
 
@@ -229,7 +215,7 @@ public class TelegramRepository : ITelegramRepository
 
     public async Task<List<Domain.Group>> GetUserGroupsAsync(long userId)
     {
-        var user = await _context.Users
+        var user = await context.Users
             .Include(u => u.Groups)
             .FirstOrDefaultAsync(u => u.Id == userId);
 

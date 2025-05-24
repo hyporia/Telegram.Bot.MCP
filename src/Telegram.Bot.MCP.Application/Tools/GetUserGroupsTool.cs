@@ -19,7 +19,7 @@ public class GetUserGroupsTool(ITelegramRepository repository, ILogger<GetUserGr
             if (user == null)
             {
                 logger.LogWarning("Failed to get user groups: User {userId} not found", userId);
-                return $"Failed to get groups: User {userId} not found";
+                return $"User {userId} not found";
             }
 
             var groups = await repository.GetUserGroupsAsync(userId);

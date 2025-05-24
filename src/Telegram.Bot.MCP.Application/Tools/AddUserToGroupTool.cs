@@ -19,14 +19,14 @@ public class AddUserToGroupTool(ITelegramRepository repository, ILogger<AddUserT
             if (user == null)
             {
                 logger.LogWarning("Failed to add user to group: User {userId} not found", userId);
-                return $"Failed to add user to group: User {userId} not found";
+                return $"User {userId} not found";
             }
 
             var group = await repository.GetGroupByIdAsync(groupId);
             if (group == null)
             {
                 logger.LogWarning("Failed to add user to group: Group {groupId} not found", groupId);
-                return $"Failed to add user to group: Group {groupId} not found";
+                return $"Group {groupId} not found";
             }
 
             var success = await repository.AddUserToGroupAsync(userId, groupId);

@@ -20,7 +20,7 @@ public class SendMessageToMeTool(ITelegramBot telegramBot, ITelegramRepository r
             if (meUser == null)
             {
                 logger.LogWarning("No user is marked as 'Me'. Use the IAm tool first.");
-                return "Cannot send message: No user is marked as 'Me'. Please use the IAm tool to identify yourself first.";
+                return $"Cannot send message: No user is marked as 'Me'. Please use the {nameof(IAmTool)} tool to identify yourself first.";
             }
 
             var message = new Domain.Message(meUser, messageText, DateTime.UtcNow, false);

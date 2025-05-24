@@ -15,7 +15,7 @@ public class IAmTool(ITelegramRepository repository)
         if (result)
         {
             var user = await repository.GetUserByIdAsync(userId);
-            return $"You've been successfully identified as {user?.ToString() ?? userId.ToString()}";
+            return $"You've been successfully identified as {user}";
         }
         else
         {

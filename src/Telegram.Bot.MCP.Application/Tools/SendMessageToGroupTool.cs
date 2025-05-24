@@ -22,7 +22,7 @@ public class SendMessageToGroupTool(
             if (group == null)
             {
                 logger.LogWarning("Failed to send message to group: Group {groupId} not found", groupId);
-                return $"Failed to send message: Group {groupId} not found";
+                return $"Group {groupId} not found";
             }
 
             var successCount = 0;

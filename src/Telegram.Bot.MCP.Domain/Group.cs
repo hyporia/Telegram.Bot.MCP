@@ -5,12 +5,13 @@ public class Group
     public int Id { get; private set; }
     public string Name { get; private set; }
 
-    // Navigation property for many-to-many relationship
     public virtual ICollection<User> Users { get; private set; } = [];
 
     public Group(string name) => Name = name;
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     private Group() { }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
     public void AddUser(User user)
     {
@@ -22,10 +23,7 @@ public class Group
 
     public void RemoveUser(User user)
     {
-        if (Users.Contains(user))
-        {
-            Users.Remove(user);
-        }
+        Users.Remove(user);
     }
 
     public override string ToString() => $"{Id}: {Name}";

@@ -19,14 +19,14 @@ public class RemoveUserFromGroupTool(ITelegramRepository repository, ILogger<Rem
             if (user == null)
             {
                 logger.LogWarning("Failed to remove user from group: User {userId} not found", userId);
-                return $"Failed to remove user from group: User {userId} not found";
+                return $"User {userId} not found";
             }
 
             var group = await repository.GetGroupByIdAsync(groupId);
             if (group == null)
             {
                 logger.LogWarning("Failed to remove user from group: Group {groupId} not found", groupId);
-                return $"Failed to remove user from group: Group {groupId} not found";
+                return $"Group {groupId} not found";
             }
 
             var success = await repository.RemoveUserFromGroupAsync(userId, groupId);
