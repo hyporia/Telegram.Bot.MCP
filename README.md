@@ -1,5 +1,9 @@
 # Telegram.Bot.MCP
 
+[![Docker Image Version](https://img.shields.io/docker/v/hyporia123/telegram-bot-mcp?sort=semver&label=docker)](https://hub.docker.com/r/hyporia123/telegram-bot-mcp)
+[![Docker Pulls](https://img.shields.io/docker/pulls/hyporia123/telegram-bot-mcp)](https://hub.docker.com/r/hyporia123/telegram-bot-mcp)
+[![Docker Image Size](https://img.shields.io/docker/image-size/hyporia123/telegram-bot-mcp)](https://hub.docker.com/r/hyporia123/telegram-bot-mcp)
+
 ## Overview
 
 Telegram.Bot.MCP serves as a bridge between AI agents (like GitHub Copilot) and the Telegram messaging platform. The application allows AI assistants to interact with Telegram users via a bot, maintain user information in a SQLite database, and can be configured and run via Docker.
@@ -44,6 +48,9 @@ docker run -d --name telegram-bot-mcp \
     -e TELEGRAM_BOT_TOKEN=your_token_here \
     hyporia123/telegram-bot-mcp:latest
 ```
+
+> **Docker Image**: [`hyporia123/telegram-bot-mcp:latest`](https://hub.docker.com/r/hyporia123/telegram-bot-mcp)  
+> **Docker Hub**: [https://hub.docker.com/r/hyporia123/telegram-bot-mcp](https://hub.docker.com/r/hyporia123/telegram-bot-mcp)
 
 ### Integrate with GitHub Copilot in VSCode
 
@@ -97,6 +104,37 @@ Create an `mcp.json` file in your `.vscode` folder with the following configurat
 3. Click on 'Select tools' icon
 4. Scroll down to the bottom and click on 'Add more tools'
 5. Follow the instructions to add telegram-bot-mcp as a new tool
+
+## Docker Image
+
+The Docker image for this project is available on Docker Hub:
+
+- **Repository**: [hyporia123/telegram-bot-mcp](https://hub.docker.com/r/hyporia123/telegram-bot-mcp)
+- **Tags**:
+  - `latest`: Most recent stable build
+  - `x.y.z`: Version specific tags
+
+### Image Information
+
+- Based on .NET 9.0 Alpine
+- Runs as a non-root user for improved security
+- Data persisted in `/var/lib/telegram-bot-mcp/telegram.db`
+
+### Usage
+
+```bash
+docker pull hyporia123/telegram-bot-mcp:latest
+```
+
+For custom configuration:
+
+```bash
+docker run -d \
+  --name telegram-bot-mcp \
+  -e TELEGRAM_BOT_TOKEN=your_token_here \
+  -v telegram_data:/var/lib/telegram-bot-mcp \
+  hyporia123/telegram-bot-mcp:latest
+```
 
 ### Building from Source
 
