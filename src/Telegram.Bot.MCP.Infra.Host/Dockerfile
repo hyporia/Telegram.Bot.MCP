@@ -19,9 +19,6 @@ RUN mkdir -p /var/lib/telegram-bot-mcp && \
 # Set connection string to use standard Alpine data directory
 ENV ConnectionStrings__DefaultConnection="Data Source=/var/lib/telegram-bot-mcp/telegram.db"
 
-# Create volume for persistent data storage using standard location
-VOLUME ["/var/lib/telegram-bot-mcp"]
-
 # Switch to non-root user
 USER appuser
 
