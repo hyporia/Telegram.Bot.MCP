@@ -16,7 +16,6 @@ RUN mkdir -p /var/lib/telegram-bot-mcp && \
     chown -R appuser:appgroup /var/lib/telegram-bot-mcp && \
     chmod 755 /var/lib/telegram-bot-mcp
 
-# Set connection string to use standard Alpine data directory
 ENV ConnectionStrings__DefaultConnection="Data Source=/var/lib/telegram-bot-mcp/telegram.db"
 
 # Switch to non-root user
