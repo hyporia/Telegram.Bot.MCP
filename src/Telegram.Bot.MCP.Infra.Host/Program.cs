@@ -76,6 +76,9 @@ builder.Services
     .AddTransient<ITelegramBot, TelegramBot>()
     .AddHttpClient<ITelegramBotClient, TelegramBotClient>(httpClient => new(token, httpClient));
 
+// Add the background service for automatic message listening
+builder.Services.AddHostedService<TelegramMessageListener>();
+
 if (!string.IsNullOrEmpty(otlpEndpoint))
 {
     builder.Services.AddOpenTelemetry()
