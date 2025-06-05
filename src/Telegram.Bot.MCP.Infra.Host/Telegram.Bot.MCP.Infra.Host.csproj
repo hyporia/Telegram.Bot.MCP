@@ -1,13 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-	<UserSecretsId>426e33bc-1c7e-4345-bb63-297783f9c1ed</UserSecretsId>
-	<RootNamespace>Telegram.Bot.MCP.Infra.Host</RootNamespace>
-	<AssemblyName>Telegram.Bot.MCP</AssemblyName>
+    <UserSecretsId>426e33bc-1c7e-4345-bb63-297783f9c1ed</UserSecretsId>
+    <RootNamespace>Telegram.Bot.MCP.Infra.Host</RootNamespace>
+    <AssemblyName>Telegram.Bot.MCP</AssemblyName>
     <Version>0.0.1</Version>
     <Authors>hyporia</Authors>
     <Company>hyporia</Company>
@@ -17,40 +16,35 @@
     <RepositoryUrl>https://github.com/hyporia/Telegram.Bot.MCP.git</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.4">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.4" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.4" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.4" />
-    <PackageReference Include="ModelContextProtocol" Version="0.2.0-preview.1" />
-    <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.11.2" />
-    <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.11.2" />
-    <PackageReference Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.11.0-beta.2" />
-    <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.11.1" />
-    <PackageReference Include="Telegram.Bot" Version="22.5.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="Microsoft.Extensions.Http" />
+    <PackageReference Include="ModelContextProtocol" />
+    <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" />
+    <PackageReference Include="OpenTelemetry.Extensions.Hosting" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.Http" />
+    <PackageReference Include="Telegram.Bot" />
   </ItemGroup>
-
   <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
-    <ItemGroup Condition="'$(Configuration)' == 'Debug'">
-	    <None Update="appsettings.Development.json">
-		    <DependentUpon>appsettings.json</DependentUpon>
-		    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	    </None>
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\Telegram.Bot.MCP.Application\Telegram.Bot.MCP.Application.csproj" />
-      <ProjectReference Include="..\Telegram.Bot.MCP.Domain\Telegram.Bot.MCP.Domain.csproj" />
-      <ProjectReference Include="..\Telegram.Bot.MCP.Infra.Persistance\Telegram.Bot.MCP.Infra.Persistance.csproj" />
-    </ItemGroup>
-	
+  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
+    <None Update="appsettings.Development.json">
+      <DependentUpon>appsettings.json</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Telegram.Bot.MCP.Application\Telegram.Bot.MCP.Application.csproj" />
+    <ProjectReference Include="..\Telegram.Bot.MCP.Domain\Telegram.Bot.MCP.Domain.csproj" />
+    <ProjectReference Include="..\Telegram.Bot.MCP.Infra.Persistance\Telegram.Bot.MCP.Infra.Persistance.csproj" />
+  </ItemGroup>
 </Project>

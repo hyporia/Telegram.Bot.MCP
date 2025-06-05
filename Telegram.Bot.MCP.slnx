@@ -1,4 +1,8 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="Directory.Packages.props" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src/Telegram.Bot.MCP.Application/Telegram.Bot.MCP.Application.csproj" />
     <Project Path="src/Telegram.Bot.MCP.Domain/Telegram.Bot.MCP.Domain.csproj" />
