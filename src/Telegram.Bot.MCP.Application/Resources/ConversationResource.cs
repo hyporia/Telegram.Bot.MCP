@@ -11,7 +11,7 @@ public class ConversationResource(ITelegramRepository repository)
 {
     [McpServerResource(UriTemplate = "telegram://user/{userId}/conversation?limit={limit}", Name = "Telegram conversation")]
     [Description("Conversation history with a user")]
-    public async ValueTask<ResourceContents> TemplateResource(RequestContext<ReadResourceRequestParams> requestContext, long userId, int limit)
+    public async ValueTask<ResourceContents> Conversation(RequestContext<ReadResourceRequestParams> requestContext, long userId, int limit)
     {
         var messages = await repository.GetUserMessagesAsync(userId, limit);
 

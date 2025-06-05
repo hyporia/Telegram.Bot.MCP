@@ -62,7 +62,7 @@ builder.Services.AddTransient<ITelegramRepository, TelegramRepository>();
 builder.Services
     .AddMcpServer()
     .WithStdioServerTransport()
-    .WithToolsFromAssembly(typeof(GetAllUsersTool).Assembly)
+    .WithToolsFromAssembly(typeof(SendMessageTool).Assembly)
     .WithResourcesFromAssembly(typeof(ConversationResource).Assembly)
     ;
 
