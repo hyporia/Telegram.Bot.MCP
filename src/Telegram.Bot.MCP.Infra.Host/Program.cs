@@ -6,9 +6,9 @@ using Microsoft.Extensions.Logging;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
-using System.Runtime;
 using Telegram.Bot;
 using Telegram.Bot.MCP.Application.Interfaces;
+using Telegram.Bot.MCP.Application.Resources;
 using Telegram.Bot.MCP.Application.Tools;
 using Telegram.Bot.MCP.Infra.Host.Services;
 using Telegram.Bot.MCP.Infra.Persistance;
@@ -63,6 +63,7 @@ builder.Services
     .AddMcpServer()
     .WithStdioServerTransport()
     .WithToolsFromAssembly(typeof(GetAllUsersTool).Assembly)
+    .WithResourcesFromAssembly(typeof(ConversationResource).Assembly)
     ;
 
 var token = builder.Configuration["TELEGRAM_BOT_TOKEN"];
@@ -99,7 +100,7 @@ var app = builder.Build();
 await using (var scope = app.Services.CreateAsyncScope())
 {
     var logger = scope.ServiceProvider.GetRequiredService<ILogger<ApplicationDbContext>>();
-    
+
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     var pendingMigrations = await dbContext.Database.GetPendingMigrationsAsync();
     if (pendingMigrations.Any())
